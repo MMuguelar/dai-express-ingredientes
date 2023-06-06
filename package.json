@@ -1,7 +1,7 @@
 {
   "name": "app-04-express-sql-router",
   "version": "1.0.0",
-  "description": "Ejemplo de API con express que accede a SQL Server, utiliza env y tiene un FrontEnd",
+  "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
