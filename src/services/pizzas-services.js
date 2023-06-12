@@ -24,7 +24,7 @@ class PizzaService {
                     };
                 }
                 if (Ingrediente) {
-                    pizzas[Id].Ingredientes.push(Ingrediente);
+                    pizzas[Id].Ingredientes.push({id, Ingrediente});
                 }
             }
             
