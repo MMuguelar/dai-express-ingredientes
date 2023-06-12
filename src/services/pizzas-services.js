@@ -8,15 +8,33 @@ class PizzaService {
         
         try {
             let pool   = await sql.connect(config);
-            let result = await pool.request().query("SELECT * FROM Pizzas");
-            returnArray = result.recordset;
+            let result = await pool.request().query("SELECT p.*, i.Nombre AS Ingrediente FROM Pizzas p LEFT JOIN IngredientesXPizzas ixp ON p.Id = ixp.IdPizza LEFT JOIN Ingredientes i ON ixp.IdIngrediente = i.Id");
+            
+            let pizzas = {};
+            for (let record of result.recordset) {
+                const { Id, Nombre, LibreGluten, Importe, Descripcion, Ingrediente } = record;
+                if (!pizzas[Id]) {
+                    pizzas[Id] = {
+                        Id,
+                        Nombre,
+                        LibreGluten,
+                        Importe,
+                        Descripcion,
+                        Ingredientes: []
+                    };
+                }
+                if (Ingrediente) {
+                    pizzas[Id].Ingredientes.push(Ingrediente);
+                }
+            }
+            
+            returnArray = Object.values(pizzas);
         }
         catch (error) {
             logHelper.logError('PizzaService->getAll', error);
         }
         return returnArray;
     }
-
     getById = async (id) => {
         let returnEntity = null;
 
@@ -27,14 +45,13 @@ class PizzaService {
                                 .query('SELECT * FROM Pizzas WHERE Id = @pId');
             returnEntity = result.recordset[0];
             
-            // Obtener los ingredientes de la pizza
-            let ingredientsResult = await pool.request()
+            let ingredientesResult = await pool.request()
                 .input('pIdPizza', sql.Int, id)
                 .query('SELECT Ingredientes.Id, Ingredientes.Nombre, IngredientesXPizzas.Cantidad, Unidades.Nombre AS Unidad FROM IngredientesXPizzas ' +
                        'INNER JOIN Ingredientes ON IngredientesXPizzas.IdIngrediente = Ingredientes.Id ' +
                        'INNER JOIN Unidades ON IngredientesXPizzas.IdUnidad = Unidades.Id ' +
                        'WHERE IngredientesXPizzas.IdPizza = @pIdPizza');
-            returnEntity.Ingredientes = ingredientsResult.recordset;
+            returnEntity.Ingredientes = ingredientesResult.recordset;
         } catch (error) {
             logHelper.logError('PizzaService->getById', error);
         }
