@@ -1,5 +1,5 @@
 
-## Modulos Instalados
+## Modulos
 - npm i dotenv
 - npm i express
 - npm i cors
@@ -7,8 +7,8 @@
 - npm i mssql
 
 
-##
->npm start server
+## cmd
+    >npm start server
 
 
 - Api
