@@ -1,4 +1,4 @@
-class Pizza {
+class Pizzas {
     Id;
     Nombre;
     LibreGluten;

@@ -8,7 +8,7 @@ const pizzaService = new PizzaService();
 router.get('', async (req, res) => {
   let respuesta;
   const pizzas = await pizzaService.getAll();
-  if (pizza!=null){
+  if (pizzas!=null){
     respuesta = res.status(StatusCodes.OK).json(pizzas);
   } else {
     respuesta = res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(`Error interno.`);

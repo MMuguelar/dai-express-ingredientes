@@ -26,6 +26,15 @@ class PizzaService {
                                 .input('pId', sql.Int, id)
                                 .query('SELECT * FROM Pizzas WHERE Id = @pId');
             returnEntity = result.recordset[0];
+            
+            // Obtener los ingredientes de la pizza
+            let ingredientsResult = await pool.request()
+                .input('pIdPizza', sql.Int, id)
+                .query('SELECT Ingredientes.Id, Ingredientes.Nombre, IngredientesXPizzas.Cantidad, Unidades.Nombre AS Unidad FROM IngredientesXPizzas ' +
+                       'INNER JOIN Ingredientes ON IngredientesXPizzas.IdIngrediente = Ingredientes.Id ' +
+                       'INNER JOIN Unidades ON IngredientesXPizzas.IdUnidad = Unidades.Id ' +
+                       'WHERE IngredientesXPizzas.IdPizza = @pIdPizza');
+            returnEntity.Ingredientes = ingredientsResult.recordset;
         } catch (error) {
             logHelper.logError('PizzaService->getById', error);
         }
