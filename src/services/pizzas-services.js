@@ -1,8 +1,33 @@
 import config from './../../dbconfig.js';
 import sql from 'mssql';
 import logHelper from './../modules/log-helper.js';
+import { createId } from 'crypto-id';
 
 class PizzaService {
+    Autenticar = async (Usuarios)=> {
+        let token = null;
+
+        try {
+            let pool   = await sql.connect(config);
+            let result = await pool.request()
+                                .input('pId', sql.Int, Usuarios?.Id ?? 0)
+                                .query('SELECT * FROM Usuarios WHERE Id = @pId');
+            if(Usuarios?.UserName = Usuarios.UserName && Usuarios?.UserName == Password)
+            {
+             token = createId();;
+             
+
+            }
+           
+        } catch (error) {
+            logHelper.logError('PizzaService->Autenticar', error);
+        }
+
+        return token;
+        
+    }
+    
+    
     getAll = async () => {
         let returnArray = null;
         
