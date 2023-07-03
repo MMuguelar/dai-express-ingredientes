@@ -10,13 +10,11 @@ class PizzaService {
         try {
             let pool   = await sql.connect(config);
             let result = await pool.request()
-                                .input('pId', sql.Int, Usuarios?.Id ?? 0)
-                                .query('SELECT * FROM Usuarios WHERE Id = @pId');
+                                .input('pId', sql.Int, Usuarios?.UserName ?? 0)
+                                .query('SELECT * FROM Usuarios WHERE UserName = @Username');
             if(Usuarios?.UserName = Usuarios.UserName && Usuarios?.UserName == Password)
             {
-             token = createId();;
-             
-
+             token = createId();
             }
            
         } catch (error) {
@@ -26,7 +24,7 @@ class PizzaService {
         return token;
         
     }
-    
+    ValidarToken=
     
     getAll = async () => {
         let returnArray = null;
